@@ -1,0 +1,22 @@
+[build-system]
+requires = ["poetry>=1.1.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "bhr"
+version = "0.1.0"
+description = "Your project description"
+authors = ["bishoyhany2006@gmail.com"]
+python = ">=3.11"
+
+[tool.poetry.dependencies]
+# Add your dependencies here
+django-crispy-forms = "*"
+crispy-bootstrap5 = "*"
+tensorflow = "*"
+pillow = "*"
+mysqlclient = "*"
+
+[tool.poetry.group.dev.dependencies]
+
+
