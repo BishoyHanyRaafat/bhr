@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block headers %} 
+<link rel="stylesheet" type="text/css" href="{% static 'styles/home_style.css' %}"> 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto Mono|Gabarito|Varela+Round">
+{% endblock %}
+
+{% block title %}Home{% endblock %}
+{% block content %} 
+<div class="container mt-5 p-2">
+    <div class="row justify-content-start">
+        <div class="col-md-4 offset-1 offset-md-2">
+            <div class="shadow-lg card center"
+            data-mdb-toggle="animation"
+            data-mdb-animation-start="onLoad" 
+            data-mdb-animation="slide-right"
+            style="max-width: 18rem; background-color:#008374">
+                <div class="container mt-4">
+                    <img src="{% static 'assets/bishoy.png' %}" alt="" class="rounded-circle mx-auto" height="150px" width="150px">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title mb-3" style="font-family: Gabarito;">Bishoy <br> Hany <br> Raafat</h5>
+                  <hr>
+                  <p class="card-text mt-3 pb-2" style="font-family: Roboto Mono;">Python Excerpt</p>
+                  <h5 class="card-footer">BHR</h5>
+                </div>
+            </div>
+        </div>
+        <div class=
+        "col-md-5 offset-1 offset-md-0 mt-5 me-6 mb-5 mb-md-0 mt-md-0 me-md-0 rounded home-content" 
+        style="font-size: larger; 
+        font-family: Lato;
+        background-color:#fff;">
+            <div class="ms-4 mt-4 ms-md-0 mt-md-0" >
+                <h1 style="font-family:'Varela Round';" class="mb-3">Hello</h1>
+                <p>
+                    In the fast-evolving tech and AI landscape,
+                    I've spent three years as a Python programer. 
+                    My journey has focused on Deep Learning and Neural Networks, 
+                    with expertise in image recognition and natural language 
+                    processing using tools like TensorFlow. My diverse project 
+                    portfolio showcases my capabilities, spanning image analysis 
+                    to sentiment understanding. Beyond Machine Learning, 
+                    I offer services including custom Discord bot creation,
+                    automation solutions, and sending web request (web automation).
+                </p>
+                <a class="btn btn-outline-projects mb-3 rounded-pill" role="button" href="/core/projects" style="font-family:'Varela Round';">
+                    <div class="mx-4">Projects</div>
+                </a>
+                <a class="btn btn-outline-secondary btn-outline-certificates mb-3 rounded-pill" href="/core/certificates" role="button" style="font-family:'Varela Round';">
+                    <div class="mx-4">Certificates</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}

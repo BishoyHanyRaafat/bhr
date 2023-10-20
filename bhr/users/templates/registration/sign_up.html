@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}sign-up{% endblock %} 
+{% load crispy_forms_tags %}
+{% load static %}
+{% block headers %} 
+<link rel="stylesheet" type="text/css" href="{% static 'styles/home_style.css' %}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gabarito">
+{% endblock %}
+{% block content %}
+<div class="container mt-5 p-2">
+  <div class="row justify-content-start">
+    <div class="col-6 offset-2 shadow-lg rounded-4 card p-4">
+      <h5 class="card-body" style="font-family: Gabarito;; text-align: center">
+        Login to BHR 
+      </h5>
+      <form method="post">
+        {% csrf_token %}{{form|crispy}}
+        <p>Have an account? Login <a href="/login/">Here</a>!</p>
+        <button type="submit" class="btn btn-success">Register</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
