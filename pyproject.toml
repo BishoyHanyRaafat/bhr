@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "bhr"
 version = "0.1.0"
-description = "Your project description"
+description = "bhr website"
 authors = ["bishoyhany2006@gmail.com"]
 python = ">=3.11"
 
