@@ -1,0 +1,44 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block headers %} 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
+{% endblock %}
+{% block title %}Certificatess{% endblock %}
+{% block content %}
+<div class="container-fluid" >
+    <div class="row mb-3" style="font-family: 'Noto Sans'">
+        <div class="col-4 mt-5">
+            {% for certificate in certificates %}
+            <ul class="list-group m-2" >
+                <li class="list-group-item rounded-5" style="background-color: transparent; color: white;">
+                    <div onclick="loadCertificates('{{certificate.certificate_id}}')" style="cursor:pointer">{{certificate.title}}
+                    </div>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+        <div class="col-6 ms-5 mt-5" id="div-image">
+            <h3 id="certificate-title">Certificates</h3>
+            <div id="certificate-content">
+                <p>
+                    My journey begin with python and I have worked on a range of projects.
+                </p>
+                <p>
+                    <b>Delving into Deep Learning</b> My focus has been on immersing myself in the intricacies of Deep Learning and Neural Networks, where I have developed solutions for tasks such as image recognition and natural language processing. Frameworks such as TensorFlow have proven to be tools in my work.
+                </p>
+                <p>
+                    <b>A Portfolio that Speaks</b> Throughout my journey I have worked on a range of projects ranging from analyzing images to understanding sentiments.
+                </p>
+                <p>
+                    <b>Beyond Deep Learning</b> In addition to my expertise in Machine Learning I also offer services that extend beyond it. This includes creating customized Discord bots automating excel and webites requests.
+                </p>
+                <p>
+                    Thank you for considering me for your project or endeavor! Please feel free to reach out if you have any questions or would like information, about how we can work together.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/certificates.js' %}"></script>
+{% endblock %}

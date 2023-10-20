@@ -1,0 +1,89 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block headers %} 
+<link rel="stylesheet" type="text/css" href="{% static 'styles/projects.css' %}"> 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&amp;family=Noto+Sans+KR:wght@500&amp;family=Noto+Sans:wght@500&amp;display=swap">
+{% endblock %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+<div class="container-fluid" >
+    <div class="row" style="font-family: 'Noto Sans'">
+        <div class="col-4 mt-5">
+            {% for project in projects %}
+            <ul class="list-group m-2" >
+                <li class="list-group-item rounded-5" style="background-color: transparent; color: white;">
+                    <div onclick="reloadPage('{{project.project_id}}')" style="cursor:pointer">{{project}}
+                    {% if project.demo %}
+                    <span class="badge text-bg-secondary">Beta</span>
+                    {%endif%}
+                    </div>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
+        <div class="col-6 ms-5 mt-5">
+            <h3 id="project-title">Projects</h3>
+            <p id="project-content">There are some projects of mine click on one of the to see more<br>
+                There are some projects which have the <span class="badge text-bg-secondary">Beta</span>
+                which you can try be your self pretty cool right?
+                <br>
+                Note: the demo are still in <b>Beta</b> and are not perfect 
+                if you want to try it predict one of two options
+                like: "Upset" or "Glad", "Cat" or "Dog" 
+            </p>
+            <div id="project-images"></div>
+            <div id="project-predictions">
+                {% if prediction.prediction != '' %}
+                <div class="row">
+                    <label for="image-uploaded">Image:</label>
+                    <img src="{{prediction.image_url}}" max-width="500px" max-height="500px"id="image-uploaded">
+                </div>
+                <div class="row mb-3">
+                    <label>Prediction: {{ prediction.prediction }}</label>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3" style="font-family: 'Open Sans';">
+        <div class="offset-4 col-7">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.project_id }}
+                {{ form.image_url }}
+                <div class="ms-5 rounded-5 d-flex align-items-center">
+                    <!-- Input field -->
+                    <div class="position-relative" style="flex-grow: 1;">
+                        <input class="form-control" type="text" id="message-input" placeholder="Enter a prompt here (Used in some demo models)"  style="border-color: black;display :none" readonly>                    
+                        <img id="image-preview" src="" class="m-1" alt="" style="position: absolute; top: 0; left: 0; max-width: 60px;max-height: 60px; display: none;">
+                    </div>
+                    <!-- File input and label -->
+                    <div class="image-upload ms-3" id="file-input-div" style="display: none;">
+                        <label for="file-input" style="cursor: pointer; margin-right: 10px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                            </svg>
+                        </label>
+                        {{form.image}}
+                    </div>
+                    <button type="submit" id="submit-button" class="btn btn-outline-primary ms-2" style="display: none; border-color: transparent;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                            <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/projects.js' %}"></script>
+<script>
+    loadProject('{{prediction.project_id}}')
+    projectIdInput.value = ''
+</script>
+{% endblock %}
