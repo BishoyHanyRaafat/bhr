@@ -107,22 +107,30 @@ function fetchAndDisplayImages(projectId) {
         document.getElementById('project-images').innerHTML = '';
         document.getElementById('project-predictions').display = "block";
         var aligment = 'end';
-        for (let i = 0; i < data.images.length; i++) {
-            if(aligment == 'start'){
-                aligment = 'end';
-            }
-            else{
-                aligment = 'start';
-                var divElement = document.createElement('div');
-                divElement.className= 'row';
-            }
+        if (data.images.length > 1){
+            for (let i = 0; i < data.images.length; i++) {
+                if(aligment == 'start'){
+                    aligment = 'end';
+                }
+                else{
+                    aligment = 'start';
+                    var divElement = document.createElement('div');
+                    divElement.className= 'row';
+                }
+                const imageElement = document.createElement('img');
+                imageElement.src = data.images[i];
+                imageElement.style.width = '300px';
+                imageElement.className = `rounded-4 float-${aligment} border border-2 border-black m-2`;
+                divElement.appendChild(imageElement);
+                document.getElementById('project-images').appendChild(divElement); } 
+        }else{
             const imageElement = document.createElement('img');
-            imageElement.src = data.images[i];
-            imageElement.style.width = '300px';
-            imageElement.className = `rounded float-${aligment}`;
-            divElement.appendChild(imageElement);
-            document.getElementById('project-images').appendChild(divElement);
+            imageElement.src = data.images[0];
+            imageElement.style.width = '100%';
+            imageElement.className = `rounded-4 border border-2 border-black m-2`;
+            document.getElementById('project-images').appendChild(imageElement); 
+        }
             
         }
-  })};
+  )};
   
