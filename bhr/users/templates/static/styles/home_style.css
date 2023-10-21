@@ -35,3 +35,9 @@ hr {
         width : 87%;
   }
 }
+.animation:hover {
+    transform: scale(1.05);
+}
+.animation{
+    transition: transform 0.2s;
+}

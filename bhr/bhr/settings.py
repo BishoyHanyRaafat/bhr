@@ -64,7 +64,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'projects', 'templates'), 
-                 os.path.join(BASE_DIR, 'users', 'templates'), ],
+                 os.path.join(BASE_DIR, 'users', 'templates'), 
+                 os.path.join(BASE_DIR, 'discounts', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,6 +128,7 @@ USE_TZ = True
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,"users","templates","static"),
     os.path.join(BASE_DIR,"projects",'templates','static'),
+    os.path.join(BASE_DIR,"discounts","templates","static"),
 )
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
@@ -140,3 +142,5 @@ LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/login/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DATE_INPUT_FORMATS = ['%d-%m-%Y']

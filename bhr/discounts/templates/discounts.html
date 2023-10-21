@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block headers %} 
+<link rel="stylesheet" type="text/css" href="{% static 'css/discounts.css' %}"> 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playpen+Sans|Merienda">
+{% endblock %}
+{% block title %}Discounts{% endblock %}
+{% block content %}
+<div class="container" style="font-size: xx-large; text-align: center">
+    <div style="font-family: 'Playpen Sans';">points: <span style="font-family: Merienda;">{{total_points}}</span></div>
+    <div class="row" style="font-family: Merienda;">
+        <span class="col-1">{{steps.0}}$</span>
+        <div class="col-10 align-self-center">
+          <div class="progress" role="progressbar" aria-label="Points" aria-valuenow="{{progress_bar}}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar" role="progressbar" style="width: {{progress_bar}}%"></div>
+          </div>
+        </div>
+        <span class="col-1">{{steps.1}}$</span>
+    </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <img src="{% static 'assets/logo_no_slag.png' %}" class="rounded me-2" alt="...">
+        <strong class="me-auto">Bootstrap</strong>
+        <small>11 mins ago</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Hello, world! This is a toast message.
+      </div>
+    </div>
+  </div>
+<div class="row justify-content-center">
+    {% for key, value in vouchers.items %}
+    <div class="col-4 ms-4 mb-2">
+        <div class="card card-over rounded-4 animation">
+            <img src="{% static 'assets/dollar-bill' %}{{ value }}.png" width="80px" alt="Voucher 1">
+            <div class="card-body">
+                <div class="horizontal-content">
+                    <h5 class="card-title card-over-title" style="font-family: Merienda;">{{ value }}$</h5>
+                    <p class="card-text card-over-text" style="font-family: 'Playpen Sans';">Points Required: <span style="font-family: Merienda ;">{{ key }}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script src="{% static 'js/discounts.js' %}">
+</script>
+{% endblock %}

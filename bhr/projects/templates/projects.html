@@ -14,7 +14,7 @@
     <div class="row" style="font-family: 'Noto Sans'">
         <div class="col-4 mt-5">
             {% for project in projects %}
-            <ul class="list-group m-2" >
+            <ul class="list-group m-2 user-select-none">
                 <li class="list-group-item rounded-5" style="background-color: transparent; color: white;">
                     <div onclick="reloadPage('{{project.project_id}}')" style="cursor:pointer">{{project}}
                     {% if project.demo %}
