@@ -8,7 +8,7 @@
 {% block title %}Discounts{% endblock %}
 {% block content %}
 <div class="container" style="font-size: xx-large; text-align: center">
-    <div style="font-family: 'Playpen Sans';">points: <span style="font-family: Merienda;">{{total_points}}</span></div>
+    <div style="font-family: 'Playpen Sans';">Your points: <span style="font-family: Merienda;">{{total_points}}</span></div>
     <div class="row" style="font-family: Merienda;">
         <span class="col-1">{{steps.0}}$</span>
         <div class="col-10 align-self-center">
@@ -36,7 +36,7 @@
     {% for key, value in vouchers.items %}
     <div class="col-4 ms-4 mb-2">
         <div class="card card-over rounded-4 animation">
-            <img src="{% static 'assets/dollar-bill' %}{{ value }}.png" width="80px" alt="Voucher 1">
+            <img src="{% static 'assets/dollar-bill' %}{{ value }}.png" width="80px" alt="{{value}}">
             <div class="card-body">
                 <div class="horizontal-content">
                     <h5 class="card-title card-over-title" style="font-family: Merienda;">{{ value }}$</h5>

@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from .models import Point
 import datetime
+from django.contrib.auth.decorators import login_required
+
+
 # Create your views here.
 
 # 300 -> 20$
@@ -11,6 +14,9 @@ points_to_vouchers = {300 : 20,
                         600 : 50,
                         950 : 100,
                         1500 : 150}
+
+
+@login_required(login_url='/login/')
 def discounts(request):
     points = Point.objects.filter(user=request.user.id)
     total = 0
@@ -30,7 +36,7 @@ def discounts(request):
         next_step = points_to_vouchers[points_to_vouchers.keys()[-1]]
         key_next = points_to_vouchers.keys()[-1]
     progress_bar =  total/key_next
-    
+
     return render(request, 'discounts.html',{"total_points":total,
                                              'steps':[current_step,next_step],
                                              "progress_bar":int(progress_bar*100),
