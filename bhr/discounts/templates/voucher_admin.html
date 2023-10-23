@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voucher Detail</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body data-bs-theme="dark">
+    <div class="container">
+        <h1 class="mt-4">Voucher Detail</h1>
+
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            {% if voucher.is_used %}
+                <div class="card card-over mb-3 rounded-3 bg-danger">
+            {% else %}
+                <div class="card card-over mb-3 rounded-3 bg-success">
+            {% endif %}
+                <div class="row p-2">
+                <div class="col-3">
+                    <img src="{% static 'assets/dollar-bill' %}{{ voucher.value }}.png" width="200px" alt="{{voucher.value}}">
+                </div>
+                <div class="col-6">
+                    <div class="card-body">
+                        <h5 class="card-text">Voucher ID: {{ voucher.voucher_id }}</h5>
+                        <p class="card-text">User: {{ voucher.user }}</p>
+                        <p class="card-text">For: {{voucher.value}}$</p>
+                        <p class="card-text">Used: {{voucher.is_used}}</p>
+                        <p class="card-text"><small class="text-muted">Expires in: {{voucher.date}} days</small></p>
+                    </div>
+                </div>
+                <div class="col-2 justify-content-center mt-3">
+                    <div class="p-5">
+                    {% if voucher.is_used %}
+                        <button type="submit" class="btn btn-success" name='action' value="unrevoke">Unrevoke</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-danger" name='action' value="revoke">Revoke</button>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

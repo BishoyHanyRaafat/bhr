@@ -20,7 +20,6 @@ function showToast(){
           element.remove();
         };
     })
-    console.log(document.getElementById("toastContainer").childElementCount)
     if(document.getElementById("toastContainer").childElementCount > 3){
         return
     }

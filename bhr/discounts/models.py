@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+import uuid
 # Create your models here.
 def add_year():
     return timezone.now().replace(year=timezone.now().year + 1)
 
 class Voucher(models.Model):
-    voucher_id = models.AutoField(primary_key=True)
+    voucher_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.IntegerField()
     create_date = models.DateField(auto_now_add=True)

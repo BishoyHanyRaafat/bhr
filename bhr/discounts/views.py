@@ -3,7 +3,15 @@ from .models import Point,Voucher
 import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+import qrcode
+from PIL import Image
+import os
+from io import BytesIO
+import base64
+from django.contrib.auth.decorators import user_passes_test
 
+def user_is_admin(user):
+    return user.is_superuser
 # Create your views here.
 
 # 300 -> 20$
@@ -18,6 +26,21 @@ voucher_to_points = {20 : 300,
                     50 : 600,
                     100 : 950,
                     150 : 1500}
+def get_qr(voucher_id):
+    logo = Image.open(os.path.join(
+        os.path.abspath(os.getcwd()), 
+        'projects',"templates","static","assets",'logo_no_slag.png')).convert("RGBA")
+    logo = logo.resize((60, 60))
+    qr = qrcode.QRCode()
+    qr.add_data({"voucher_id":voucher_id})
+    qr.make(fit=True)
+    img = qr.make_image().convert('RGB')
+    pos = ((img.size[0] - logo.size[0]) // 2, (img.size[1] - logo.size[1]) // 2)
+    img.paste(logo,pos)
+    image_io = BytesIO()
+    img.save(image_io, format='PNG')
+    qr_image_base64 = base64.b64encode(image_io.getvalue()).decode('utf-8')
+    return qr_image_base64
 def get_total_points(user_id):
     points = Point.objects.filter(user=user_id)
     total = 0
@@ -82,11 +105,32 @@ def new_voucher(request,voucher):
 @login_required(login_url='/login/')
 def vouchers(request):
     voucher_object = []
+    img = ""
     vouchers = Voucher.objects.filter(user=request.user).order_by("value")
     for voucher in vouchers:
         if voucher.is_used:
             pass
         else:
             date =  voucher.expire_date - datetime.date.today()
-            voucher_object.append({"value":voucher.value,"date":date.days,"id":voucher.voucher_id})
-    return render(request, 'vouchers.html',{"vouchers":voucher_object})
+            voucher_object.append({"value":voucher.value,"date":date.days,"voucher_id":voucher.voucher_id})
+    if request.method == 'POST' and request.POST.get('voucher_id').strip() != "":
+        voucher_id = request.POST.get('voucher_id')
+        img = get_qr(voucher_id)
+    return render(request, 'vouchers.html',{"vouchers":voucher_object,"qr_image":img })
+
+        
+
+@user_passes_test(user_is_admin)
+def voucher_admin(request,voucher_id):
+    voucher = Voucher.objects.filter(voucher_id=voucher_id).first()
+    voucher.date = voucher.expire_date - datetime.date.today()
+    voucher.date = voucher.date.days
+    if request.method == "POST":
+        action = request.POST.get('action')
+        if action == "revoke":
+            voucher.is_used = True
+            voucher.save()
+        elif action == "unrevoke":
+            voucher.is_used = False
+            voucher.save()
+    return render(request, 'voucher_admin.html', {'voucher':voucher})

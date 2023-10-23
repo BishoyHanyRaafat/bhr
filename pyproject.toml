@@ -16,6 +16,8 @@ crispy-bootstrap5 = "*"
 tensorflow = "*"
 pillow = "*"
 mysqlclient = "*"
+django = "*"
+qrcode = "*"
 
 [tool.poetry.group.dev.dependencies]
 
