@@ -55,32 +55,14 @@ fetch(`/core/projects/${project_id}`)
         if(data.demo == false){
             fetchAndDisplayImages(project_id);
         }
-        
-        document.getElementById('file-input').value = null
-        messageInput.setAttribute('placeholder', 'Enter a prompt here (Used in some demo models)');
-        messageInput.style.height = "40px"
-        imagePreview.style.display = 'none';
+        else{
+            divElement = document.getElementById('div-warning');
+            divElement.innerHTML = `<b class="text-danger">Demo is no longer available in this version due to the lack of memory</b>`;
+            
+        }
         projectTitle.innerHTML = `${data.title}`;
         projectContent.innerHTML = data.description;
         projectIdInput.value = data.project_id;
-        if (data.demo) {
-            messageInput.style.display = 'inline'
-            if (data.chat){
-                messageInput.removeAttribute('readonly');
-            }
-            else {
-                messageInput.setAttribute('readonly', 'readonly');
-            }
-            fileInput.style.display = 'inline';
-            submitButton.style.display = 'none';
-            messageInput.value = '';
-        }
-        else{
-            messageInput.setAttribute('readonly', 'readonly');
-            fileInput.style.display = 'none';
-            submitButton.style.display = 'none';
-            messageInput.style.display='none';
-        }
     });
 }
 

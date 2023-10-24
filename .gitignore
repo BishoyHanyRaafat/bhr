@@ -1,3 +1,6 @@
 *.env
 *.vscode
 *__pycache__
+**bhr/projects/models
+**bhr/projects/templates/projects-demo.html
+**bhr/projects/templates/static/js/projects-demo.js
