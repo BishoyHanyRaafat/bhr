@@ -26,19 +26,10 @@
     </div>
   </div>
 
-<div class="container" style="font-size: xx-large; text-align: center">
+<div class="container mt-2" style="font-size: xx-large; text-align: center">
     <div style="font-family: 'Playpen Sans';">Your points: <span style="font-family: Merienda;" id="total-points">{{total_points}}</span></div>
-    <div class="row" style="font-family: Merienda;">
-        <span class="col-1">{{steps.0}}$</span>
-        <div class="col-10 align-self-center">
-          <div class="progress" role="progressbar" aria-label="Points" aria-valuenow="{{progress_bar}}" aria-valuemin="0" aria-valuemax="100">
-            <div class="progress-bar" role="progressbar" style="width: {{ progress_bar }}%"></div>
-          </div>
-        </div>
-        <span class="col-1">{{steps.1}}$</span>
-    </div>
 </div>
-<div class="row justify-content-center">
+<div class="row justify-content-center mt-3">
     {% for key, value in vouchers.items %}
     <div class="col-4 ms-4 mb-2">
         <div class="card card-over rounded-4 animation" role="button" id="btn-modal{{key}}" onclick="redirectVoucher('{{value}}','{{key}}-{{total_points}}')">
