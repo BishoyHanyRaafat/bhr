@@ -27,7 +27,7 @@ voucher_to_points = {20 : 300,
                     100 : 950,
                     150 : 1500}
 def get_qr(url,text=None):
-    logo = Image.open(os.path.abspath(os.path.join(settings.BASE_DIR, 'static', "assets/logo_no_slag.png"))).convert("RGBA")
+    logo = Image.open(os.path.join(os.dirname(settings.BASE_DIR), 'static', "assets/logo_no_slag.png"))).convert("RGBA")
     logo = logo.resize((60, 60))
     qr = qrcode.QRCode()
     qr.add_data(url)
