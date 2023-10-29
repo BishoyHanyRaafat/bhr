@@ -1,52 +1,21 @@
 const projectTitle = document.getElementById('project-title');
 const projectContent = document.getElementById('project-content');
-const messageInput = document.getElementById('message-input');
-const fileInput = document.getElementById('file-input-div');
-const submitButton = document.getElementById('submit-button');
-const projectIdInput = document.getElementById('project-id');
-const imagePreview = document.getElementById('image-preview');
-const imageUrl = document.getElementById('image-url');
-const projectPredictions = document.getElementById('project-predictions');
-var loadFile = function(event) {  
-    try{
-        imagePreview.style.display = 'block';
-        imagePreview.src = URL.createObjectURL(event.target.files[0]);
-        messageInput.style.height = "70px"
-        messageInput.setAttribute('placeholder', ' ');
-        fileInput.style.display = 'none';
-        submitButton.style.display = 'inline';
-        imageUrl.value = imagePreview.src
-    }
-    catch{
-        imagePreview.style.display = 'none';
-        messageInput.setAttribute('placeholder', 'Enter a prompt here (Used in some demo models)');
-    }
-    messageInput.onload = function() {
-      URL.revokeObjectURL(output.src) // free memory
-    }
-  };
-window.onload = function(project_id) {
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Window loaded');
     var reloading = sessionStorage.getItem("reloading");
     var project_id = sessionStorage.getItem("project_id");
     if (reloading) {
         sessionStorage.removeItem("reloading");
         loadProject(project_id);
+        console.log(project_id);
         sessionStorage.removeItem('project_id');
-        projectPredictions.innerHTML = '';
     }
-}
-    
-function reloadP(project_id) {
+})
+function reloadPage(project_id){
     sessionStorage.setItem("reloading", "true");
     sessionStorage.setItem("project_id", project_id);
-    
     document.location.reload();
-}
-function reloadPage(project_id){
-    if(project_id == projectIdInput.value){
-        return;
-    }
-    reloadP(project_id);
 }
 function loadProject(project_id) {
 fetch(`/core/projects/${project_id}`)
@@ -57,28 +26,12 @@ fetch(`/core/projects/${project_id}`)
         }
         else{
             divElement = document.getElementById('div-warning');
-            divElement.innerHTML = `<b class="text-danger">Demo is no longer available in this version due to the lack of memory</b>`;
-            
+            divElement.innerHTML = `<b class="text-danger">Demo is no longer available in this version due to the lack of memory</b>`;  
         }
-        projectTitle.innerHTML = `${data.title}`;
+        projectTitle.innerHTML = data.title;
         projectContent.innerHTML = data.description;
-        projectIdInput.value = data.project_id;
     });
 }
-
-
-// Add an event listener to the input field
-messageInput.addEventListener('input', function() {
-    if (messageInput.value.trim() !== '') {
-        // If there is content in the input field, hide the file input and show the submit button
-        fileInput.style.display = 'none';
-        submitButton.style.display = 'inline';
-    } else {
-        // If the input is empty, show the file input and hide the submit button
-        fileInput.style.display = 'inline';
-        submitButton.style.display = 'none';
-    }
-});
 
 
 // Function to fetch and display images from a Django endpoint
@@ -87,7 +40,6 @@ function fetchAndDisplayImages(projectId) {
     .then(response => response.json())
     .then(data => {
         document.getElementById('project-images').innerHTML = '';
-        document.getElementById('project-predictions').display = "block";
         var aligment = 'end';
         if (data.images.length > 1){
             for (let i = 0; i < data.images.length; i++) {
@@ -102,14 +54,14 @@ function fetchAndDisplayImages(projectId) {
                 const imageElement = document.createElement('img');
                 imageElement.src = data.images[i];
                 imageElement.style.width = '300px';
-                imageElement.className = `rounded-4 float-${aligment} border border-2 border-black m-2`;
+                imageElement.className = `rounded-4 float-${aligment} border border-2 border-black m-1`;
                 divElement.appendChild(imageElement);
                 document.getElementById('project-images').appendChild(divElement); } 
         }else{
             const imageElement = document.createElement('img');
             imageElement.src = data.images[0];
             imageElement.style.width = '100%';
-            imageElement.className = `rounded-4 border border-2 border-black m-2`;
+            imageElement.className = `rounded-4 border border-2 border-black m-1`;
             document.getElementById('project-images').appendChild(imageElement); 
         }
             

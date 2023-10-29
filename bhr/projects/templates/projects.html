@@ -37,28 +37,10 @@
                 <b class="text-danger">Demo is no longer available in this version due to the lack of memory</b>
             </p>
             <div id="div-warning">
-
             </div>
             <div id="project-images"></div>
-            <div id="project-predictions">
-                {% if prediction.prediction != '' %}
-                <div class="row">
-                    <label for="image-uploaded">Image:</label>
-                    <img src="{{prediction.image_url}}" max-width="500px" max-height="500px"id="image-uploaded">
-                </div>
-                <div class="row mb-3">
-                    <label>Prediction: {{ prediction.prediction }}</label>
-                </div>
-                {% endif %}
-            </div>
         </div>
     </div>
-    {{ form.project_id }}
-
 </div>
 <script src="{% static 'js/projects.js' %}"></script>
-<script>
-    loadProject('{{prediction.project_id}}')
-    projectIdInput.value = ''
-</script>
 {% endblock %}

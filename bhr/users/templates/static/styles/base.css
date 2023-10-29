@@ -1,39 +1,18 @@
 @media (min-width: 992px) {
     .card-profile {
-        top:55px;
+        top: 55px;
         right: 25%;
-  }
+    }
 }
+
 @media (max-width: 992px) {
     .card-profile {
-        top:10px;
+        top: 10px;
         margin-left: 0;
-  }
+    }
 }
-body{
-    background: linear-gradient(to right, #008374 0%, #008374 35%, white 35%, white 100%); 
-}
-/* width */
-::-webkit-scrollbar {
-    width: 10px;
-    border-radius: 10px;
+
+body {
+    background: linear-gradient(to right, #008374 0%, #008374 35%, var(--bs-body-bg) 35%, var(--bs-body-bg) 100%);
 }
   
-/* Track */
-::-webkit-scrollbar-track {
-   background: transparent; 
-   border-radius: 10px;
-}
-   
- /* Handle */
-::-webkit-scrollbar-thumb {
-    background: #888; 
-    border-radius: 10px;
-}
-  
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-    width:20px;
-    border-radius: 10px;
-}

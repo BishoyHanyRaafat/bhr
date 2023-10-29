@@ -49,17 +49,7 @@ def projects(request):
                                                         "image_url":image_url}})"""
 def projects(request):
     projects = Project.objects.all()
-    image_url = ''
-    project_id = ''
-    prediction = ''
-    if request.method == 'POST':
-        project_id = request.POST["project_id"]
-    form = ImageUploadForm()
-    return render(request, 'projects.html',{'projects':projects,
-                                            'form':form,
-                                            "prediction":{"project_id": project_id,
-                                                        "prediction":prediction,
-                                                        "image_url":image_url}})
+    return render(request, 'projects.html',{'projects':projects})
 
 def return_project(_, project_id):
     project = Project.objects.filter(project_id=project_id).first()

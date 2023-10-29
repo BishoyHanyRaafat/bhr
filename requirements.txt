@@ -1,0 +1,7 @@
+django-crispy-forms 
+crispy-bootstrap5 
+tensorflow 
+pillow 
+mysqlclient
+django
+qrcode
