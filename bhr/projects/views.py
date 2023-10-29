@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from keras.preprocessing import image
 from PIL import Image
-import numpy as np
 from .models import Project, ProjectImage,Certificate
 # Create your views here.
 

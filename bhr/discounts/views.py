@@ -62,13 +62,14 @@ def get_total_points(user_id):
 @login_required(login_url='/login/')
 def discounts(request):
     user = request.user
-    if user:
+    if user.is_authenticated:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             user_ip = x_forwarded_for.split(',')[-1].strip()
         else:
             user_ip = request.META.get('REMOTE_ADDR')
-            ip, _ = IPAddress.objects.get_or_create(address=user_ip)
+        
+        ip, _ = IPAddress.objects.get_or_create(address=user_ip)
         ip.users.add(user)
     return render(request, 'discounts.html')
 
