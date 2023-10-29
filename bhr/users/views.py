@@ -7,21 +7,19 @@ from .models import IPAddress
 from django.http import HttpResponse
 from django.templatetags.static import static
 # Create your views here.
-
 def home(request):
     user = request.user
-    try:
-        user.id
-    except:
-        return render(request, 'home.html')
-    if user:
+
+    if user.is_authenticated:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             user_ip = x_forwarded_for.split(',')[-1].strip()
         else:
             user_ip = request.META.get('REMOTE_ADDR')
-            ip, _ = IPAddress.objects.get_or_create(address=user_ip)
+        
+        ip, _ = IPAddress.objects.get_or_create(address=user_ip)
         ip.users.add(user)
+    
     return render(request, 'home.html')
 
 def sign_up(request):
