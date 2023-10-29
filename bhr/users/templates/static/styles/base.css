@@ -1,18 +1,3 @@
-@media (min-width: 992px) {
-    .card-profile {
-        top: 55px;
-        right: 25%;
-    }
-}
-
-@media (max-width: 992px) {
-    .card-profile {
-        top: 10px;
-        margin-left: 0;
-    }
-}
-
 body {
     background: linear-gradient(to right, #008374 0%, #008374 35%, var(--bs-body-bg) 35%, var(--bs-body-bg) 100%);
 }
-  

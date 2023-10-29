@@ -1,9 +1,13 @@
-window.onload = function(){
+window.onload =  function(){
     mode = localStorage.getItem('mode');
     if(mode == null){
-        localStorage.setItem(mode, "light");
-        changeTheme('light');
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            localStorage.setItem('mode', 'dark');
+          } else {
+            localStorage.setItem('mode', 'light');
+          }
     }
+    mode = localStorage.getItem('mode');
     if(mode == 'dark'){
         changeTheme('dark');
         document.getElementById("darkmode-toggle").checked = true;
@@ -11,20 +15,7 @@ window.onload = function(){
     else{
         changeTheme('light');
     }
-}
-
-
-document.getElementById("profile-link").addEventListener('click', appearCard)
-function appearCard(){
-    console.log(document.getElementById("profile-card").style.display)
-    if(document.getElementById("profile-card").style.display == "block"){
-        document.getElementById("profile-card").style.display = "none";
-    }
-    else{
-        document.getElementById("profile-card").style.display = "block";
-    }
-    document.getElementById("profile-card").style.transition = "all 4s";
-}
+};
 
 
 function changeMode(){
@@ -39,13 +30,14 @@ function changeMode(){
 }
 function changeTheme(theme){
     document.body.setAttribute("data-bs-theme", theme);
-    document.getElementById("card-profile").setAttribute("data-bs-theme", theme);
+    console.log(theme)
     if(theme=='dark'){
         document.getElementById("moon").setAttribute("fill","black");
+        document.getElementById('sun').setAttribute("fill","yellow");
     }
     else{
         document.getElementById("moon").setAttribute("fill","currentColor");
+        document.getElementById("sun").setAttribute("fill","currentColor");
     }
 }
 
-document.getElementById("darkmode-toggle").addEventListener('change', changeMode)

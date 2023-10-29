@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import timedelta
 import uuid
 # Create your models here.
 def add_year():
-    return timezone.now().replace(year=timezone.now().year + 1)
+    return timezone.now() + timedelta(days=365)
 def add_weak():
-    return timezone.now().replace(day=timezone.now().day + 7)
+    return timezone.now() + timedelta(days=7)
 class Voucher(models.Model):
     voucher_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -111,8 +111,7 @@ def new_voucher(request,voucher):
         remainder = points_removed - points_to_remove
         if remainder != 0:
             Point(user=request.user,value=remainder,expire_date=expire_date).save()
-        expire_date = datetime.date.today() + datetime.timedelta(days=7)
-        Voucher(user=request.user,value=voucher,expire_date=expire_date).save()
+        Voucher(user=request.user,value=voucher).save()
         return render(request, 'new_voucher.html',{"voucher":voucher})
 
 @login_required(login_url='/login/')
