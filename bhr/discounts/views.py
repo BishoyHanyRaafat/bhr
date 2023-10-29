@@ -12,7 +12,6 @@ from users.models import IPAddress
 from django.contrib.auth.models import User
 from django.templatetags.static import static
 from django.conf import settings
-from pathlib import Path
 # Create your views here.
 
 # 300 -> 20$
@@ -28,7 +27,7 @@ voucher_to_points = {20 : 300,
                     100 : 950,
                     150 : 1500}
 def get_qr(url,text=None):
-    logo = Image.open(Path(os.path.join(settings.BASE_DIR, 'static', "assets/logo_no_slag.png"))).convert("RGBA")
+    logo = Image.open(os.path.abspath(os.path.join(settings.BASE_DIR, 'static', "assets/logo_no_slag.png"))).convert("RGBA")
     logo = logo.resize((60, 60))
     qr = qrcode.QRCode()
     qr.add_data(url)
