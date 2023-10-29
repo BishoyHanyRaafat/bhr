@@ -27,7 +27,7 @@ voucher_to_points = {20 : 300,
                     100 : 950,
                     150 : 1500}
 def get_qr(url,text=None):
-    logo = Image.open(os.path.join(os.dirname(settings.BASE_DIR), 'static', "assets/logo_no_slag.png"))).convert("RGBA")
+    logo = Image.open(os.path.join(os.path.dirname(settings.BASE_DIR), 'static', "assets/logo_no_slag.png")).convert("RGBA")
     logo = logo.resize((60, 60))
     qr = qrcode.QRCode()
     qr.add_data(url)
@@ -39,7 +39,7 @@ def get_qr(url,text=None):
         size = (img.size[0],img.size[1]+50)
         new_image = Image.new('RGB', size, (255, 255, 255))
         draw = ImageDraw.Draw(new_image)
-        font = ImageFont.truetype("arial.ttf", 16)  # You may need to adjust the font and size
+        font = ImageFont.load_default()
         new_image.paste(img, (0, 0))
         offset =  size[0] - font.getlength(text)//3
         draw.multiline_text((offset//2,img.size[1]-20), text, fill="black", font=font,align="center")
