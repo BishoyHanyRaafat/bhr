@@ -1,13 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-import tensorflow as tf
-import os
 from keras.preprocessing import image
 from PIL import Image
 import numpy as np
 from .models import Project, ProjectImage,Certificate
-from .forms import ImageUploadForm
-import io
 # Create your views here.
 
 """
