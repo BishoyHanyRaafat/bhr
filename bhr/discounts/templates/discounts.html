@@ -29,7 +29,7 @@
         </div>
     </div>
 </div>
-{% with image=request.build_absolute_uri|add:"users/" user_id=request.user.id message="Use the QR code when you get any of Bishoy's services to get a 20$ discount." %}
+{% with image=request.build_absolute_uri|add:"users/" user_id=request.user.id message="Use the QR code when you get any of Bishoy's services to get a 10$ discount." %}
 <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -39,7 +39,7 @@
             </div>
             <div class="modal-body">
                 <img src="{{ image }}{{ user_id }}" alt="QR code">
-                <p>Share the QR code on social media to get 20$ voucher if your friend used the QR code on check out</p>
+                <p>Share the QR code on social media to get 10$ voucher if your friend used the QR code on check out</p>
                 <p class="text-danger">Don't forget to add the QR code you can download it from the download button and add it on the social media platform</p>
             </div>
             <div class="modal-footer">
