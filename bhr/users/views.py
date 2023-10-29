@@ -5,6 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User, Group
 from .models import IPAddress
 from django.http import HttpResponse
+from django.templatetags.static import static
 # Create your views here.
 
 def home(request):
@@ -37,5 +38,5 @@ def sign_up(request):
 
 
 def favicon(_):
-    with open("favicon.ico", "rb") as f:
-        return HttpResponse(f.read(), content_type="image/jpeg")
+    url=static("favicon.ico")
+    return redirect(url)

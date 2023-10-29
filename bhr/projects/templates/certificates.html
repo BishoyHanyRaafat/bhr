@@ -12,7 +12,8 @@
             {% for certificate in certificates %}
             <ul class="list-group m-2 user-select-none" >
                 <li class="list-group-item rounded-5" style="background-color: transparent; color: white;">
-                    <div onclick="loadCertificates('{{certificate.certificate_id}}')" style="cursor:pointer">{{certificate.title}}
+                    <div onclick="loadCertificates('{{certificate.certificate_id}}')" class='text'style="cursor:pointer">
+                        {{certificate.title}}
                     </div>
                 </li>
             </ul>

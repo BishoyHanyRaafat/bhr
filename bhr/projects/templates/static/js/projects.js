@@ -54,14 +54,14 @@ function fetchAndDisplayImages(projectId) {
                 const imageElement = document.createElement('img');
                 imageElement.src = data.images[i];
                 imageElement.style.width = '300px';
-                imageElement.className = `rounded-4 float-${aligment} border border-2 border-black m-1`;
+                imageElement.className = `rounded-4 float-${aligment} border border-2 m-1`;
                 divElement.appendChild(imageElement);
                 document.getElementById('project-images').appendChild(divElement); } 
         }else{
             const imageElement = document.createElement('img');
             imageElement.src = data.images[0];
             imageElement.style.width = '100%';
-            imageElement.className = `rounded-4 border border-2 border-black m-1`;
+            imageElement.className = `rounded-4 border border-2 m-1`;
             document.getElementById('project-images').appendChild(imageElement); 
         }
             

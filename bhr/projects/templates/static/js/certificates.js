@@ -8,10 +8,11 @@ function loadCertificates(certificateId) {
         .then(response => response.json())
         .then(data => {
             certificateContent.innerHTML = '';
-            divImage.className = 'col-7 ms-5 mt-5';
+            divImage.className = 'col-6 ms-5 mt-5';
             var imageElement = document.createElement('img');
             imageElement.src = data.image;
-            imageElement.style.width = '740px';
+            imageElement.style.width = '100%';
+            imageElement.className += `float-start border m-1`
             certificateTitle.innerHTML = data.title;
             certificateContent.appendChild(imageElement);
         }
