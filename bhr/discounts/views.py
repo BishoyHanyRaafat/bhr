@@ -12,22 +12,27 @@ from users.models import IPAddress
 from django.contrib.auth.models import User
 from django.templatetags.static import static
 from django.conf import settings
+from django.db.models import Sum
+from django.db.models.functions import Now
+from .models import Point, Voucher
+from django.db import transaction
+from django.core.cache import cache
 # Create your views here.
 
-# 300 -> 20$
+# 250 -> 20$
 # 600 -> 50$
 # 950 -> 100$
 # 1500 -> 150$
-points_to_vouchers = {250 : 10,
-                        600 : 50,
-                        950 : 100,
+points_to_vouchers = {300 : 10,
+                        700 : 50,
+                        1100 : 100,
                         1500 : 150}
-voucher_to_points = {10 : 250,
-                    50 : 600,
-                    100 : 950,
+voucher_to_points = {10 : 300,
+                    50 : 700,
+                    100 : 1100,
                     150 : 1500}
 def get_qr(url,text=None):
-    logo = Image.open(os.path.join(os.path.dirname(settings.BASE_DIR), 'static', "assets/logo_no_slag.png")).convert("RGBA")
+    logo = Image.open(os.path.join(os.path.dirname(settings.BASE_DIR), 'static', "assets", "logo_no_slag.png")).convert("RGBA")
     logo = logo.resize((60, 60))
     qr = qrcode.QRCode()
     qr.add_data(url)
@@ -50,13 +55,7 @@ def get_qr(url,text=None):
     qr_image_base64 = base64.b64encode(image_io.getvalue()).decode('utf-8')
     return qr_image_base64
 def get_total_points(user_id):
-    points = Point.objects.filter(user=user_id)
-    total = 0
-    for point in points:
-        if point.expire_date < datetime.date.today():
-            point.delete()
-        else:
-            total += point.value
+    total = Point.objects.filter(user=user_id, expire_date__gt=Now()).aggregate(Sum('value'))['value__sum'] or 0
     return total
 @login_required(login_url='/login/')
 def discounts(request):
@@ -90,29 +89,49 @@ def moneyback(request):
                                              "vouchers":points_to_vouchers})
 @login_required(login_url='/login/')
 def new_voucher(request,voucher): 
-    total_points = get_total_points(request.user.id)
-    try: 
-        voucher_to_points[voucher]
-    except:
-        return HttpResponse("Error: Invalid voucher <br> <a href='/discounts'>Back</a>")
-    if voucher_to_points[voucher] > total_points:
-        return HttpResponse("Error: Not enough points <br> <a href='/discounts'>Back</a>")
+    cache_key = f"lock_{request.user.id}_new_voucher"
+    lock_acquired = cache.add(cache_key, "locked", timeout=60)
+    if lock_acquired:
+        total_points = get_total_points(request.user.id)
+        try: 
+            voucher_to_points[voucher]
+        except KeyError:
+            return HttpResponse("Error: Invalid voucher <br> <a href='/discounts'>Back</a>")
+        if voucher_to_points[voucher] > total_points:
+            return HttpResponse("Error: Not enough points <br> <a href='/discounts'>Back</a>")
+        else:
+            with transaction.atomic():
+                points_to_remove = voucher_to_points[voucher]
+                user_points = Point.objects.filter(user=request.user.id).order_by("expire_date")
+
+                # Calculate the total points that are eligible for removal
+                expired_points = user_points.filter(expire_date__lte=Now())
+                expired_points.delete()
+                points_removed =0
+                # Calculate and remove the points
+                remaining_points = 0
+                points_to_delete = []
+                if voucher_to_points[voucher] > total_points:
+                    return HttpResponse("Error: Not enough points <br> <a href='/discounts'>Back</a>")
+                for point in user_points.filter(expire_date__gt=Now()):
+                    if points_to_remove > points_removed:
+                        points_removed += point.value
+                        date = point.expire_date
+                        points_to_delete.append(point)
+                    else:
+                        break  # No need to iterate further
+                for point in points_to_delete:
+                    point.delete()
+                remaining_points =  points_removed-points_to_remove
+                # Create a new Point object with the remaining points (if any)
+                if remaining_points > 0:
+                    Point.objects.create(user=request.user, value=remaining_points, expire_date=date)
+
+                # Create a new Voucher object
+                Voucher.objects.create(user=request.user, value=voucher)
+                return render(request, 'new_voucher.html',{"voucher":voucher})
     else:
-        point_objects = Point.objects.filter(user=request.user.id).order_by("expire_date")
-        points_removed = 0
-        points_to_remove = voucher_to_points[voucher]
-        for point_object in point_objects:
-            if points_to_remove > points_removed:
-                points_removed += point_object.value
-                expire_date = point_object.expire_date
-                point_object.delete()
-            else:
-                break
-        remainder = points_removed - points_to_remove
-        if remainder != 0:
-            Point(user=request.user,value=remainder,expire_date=expire_date).save()
-        Voucher(user=request.user,value=voucher).save()
-        return render(request, 'new_voucher.html',{"voucher":voucher})
+        return HttpResponse("Error: The view is already being processed. Please try again later.")
 
 @login_required(login_url='/login/')
 def vouchers(request):

@@ -36,15 +36,8 @@ function redirectVoucher(voucher,number){
         const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
         redirectButton = document.getElementById("btn-modal-yes")
         modal.show();
-        redirectButton.addEventListener("click", function() {
-            const redirectToURL = `/discounts/vouchers/${voucher}`;
-            modal.hide();
-            setTimeout(function() {
-              window.location.href = redirectToURL;
-            }, 300); 
-          });
+        redirectButton.setAttribute("href", `discounts/vouchers/${voucher}`)
         return
     }
     showToast();
 }
-
