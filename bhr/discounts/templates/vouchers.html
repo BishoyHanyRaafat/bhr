@@ -53,10 +53,10 @@
                     <div class="col-md-3">
                         <img src="{% static 'assets/dollar-bill' %}{{ voucher.value }}.png" width="100px" class="card-img" alt="{{voucher.value}}">
                     </div>
-                    <div class="col-12 col-md-6 text-center">
+                    <div class="col-12 col-md-6 my-auto">
                         <div class="card-body">
                             <h5 class="card-title">{{voucher.value}}$</h5>
-                            <p class="card-text"><small class="text-muted">Expires in: {{voucher.date}} days</small></p>
+                            <p class="card-text"><small class="text-muted">Expires in: {{voucher.date}}</small></p>
                         </div>
                     </div>
                     <div class="col-12 col-md-3 text-center my-auto">

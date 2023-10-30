@@ -16,7 +16,9 @@ from django.db.models import Sum
 from django.db.models.functions import Now
 from .models import Point, Voucher
 from django.db import transaction
+from django.utils import timezone
 from django.core.cache import cache
+
 # Create your views here.
 
 # 250 -> 20$
@@ -54,6 +56,42 @@ def get_qr(url,text=None):
     img.save(image_io, format='PNG')
     qr_image_base64 = base64.b64encode(image_io.getvalue()).decode('utf-8')
     return qr_image_base64
+
+def get_time_formated(date_difference):
+    remaining_days = date_difference.days
+    date_str = ""
+    if remaining_days > 1:
+        date_str = str(remaining_days) + " days"
+    else:
+        now = timezone.now()
+        start_of_next_day = now.replace(hour=0, minute=0, second=0, microsecond=0) + timezone.timedelta(days=1)
+        time_difference = start_of_next_day - now
+
+        hours_until_new_day = int(time_difference.total_seconds() / 3600)
+        minutes_until_new_day = int((time_difference.total_seconds() % 3600) / 60)
+
+        if hours_until_new_day > 0:
+            if hours_until_new_day > 1:
+                hours_str = str(hours_until_new_day) + " hours"
+            else:
+                hours_str = str(hours_until_new_day) + " hour"
+        else:
+            hours_str = ""
+
+        if minutes_until_new_day > 0:
+            if minutes_until_new_day > 1:
+                minutes_str = str(minutes_until_new_day) + " minutes"
+            else:
+                minutes_str = str(minutes_until_new_day) + " minute"
+        else:
+            minutes_str = ""
+        if hours_str and minutes_str:
+            date_str = f"{hours_str} and {minutes_str}"
+        elif hours_str:
+            date_str = hours_str
+        else:
+            date_str = minutes_str
+    return date_str
 def get_total_points(user_id):
     total = Point.objects.filter(user=user_id, expire_date__gt=Now()).aggregate(Sum('value'))['value__sum'] or 0
     return total
@@ -139,11 +177,13 @@ def vouchers(request):
     img = ""
     vouchers = Voucher.objects.filter(user=request.user).order_by("value")
     for voucher in vouchers:
-        if voucher.is_used:
+        current_date = timezone.localdate()
+        if voucher.is_used or voucher.expire_date < current_date:
             pass
         else:
-            date =  voucher.expire_date - datetime.date.today()
-            voucher_object.append({"value":voucher.value,"date":date.days,"voucher_id":voucher.voucher_id})
+            date_difference =  voucher.expire_date - current_date
+            date_str = get_time_formated(date_difference)
+            voucher_object.append({"value":voucher.value,"date":date_str,"voucher_id":voucher.voucher_id})
     if request.method == 'POST' and request.POST.get('voucher_id').strip() != "":
         voucher_id = request.POST.get('voucher_id')
         img = get_qr(request.META['HTTP_HOST']+"/discounts/vouchers/admin/"+ voucher_id)
@@ -155,8 +195,10 @@ def voucher_admin(request,voucher_id):
     if request.user.is_superuser == False:
         return redirect(f"/admin/login/?next={request.path}")
     voucher = Voucher.objects.filter(voucher_id=voucher_id).first()
-    voucher.date = voucher.expire_date - datetime.date.today()
-    voucher.date = voucher.date.days
+    if voucher.expire_date < timezone.localdate():
+        return HttpResponse("Error: voucher expired")
+    date_difference =  voucher.expire_date - timezone.localdate()
+    voucher.date = get_time_formated(date_difference)
     if request.method == "POST":
         action = request.POST.get('action')
         if action == "revoke":
