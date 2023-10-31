@@ -52,13 +52,16 @@ function fetchAndDisplayImages(projectId) {
                     divElement.className= 'row';
                 }
                 const imageElement = document.createElement('img');
-                imageElement.src = data.images[i];
+                const imageUrl = data.images[i];
+                imageElement.onclick = function() {enlargeImage(imageUrl)};
+                imageElement.src = imageUrl;
                 imageElement.style.width = '300px';
                 imageElement.className = `rounded-4 float-${aligment} border border-2 m-1`;
                 divElement.appendChild(imageElement);
                 document.getElementById('project-images').appendChild(divElement); } 
         }else{
             const imageElement = document.createElement('img');
+            imageElement.onclick = function() {enlargeImage(data.images[0])};
             imageElement.src = data.images[0];
             imageElement.style.width = '100%';
             imageElement.className = `rounded-4 border border-2 m-1`;

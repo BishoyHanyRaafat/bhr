@@ -10,7 +10,9 @@ function loadCertificates(certificateId) {
             certificateContent.innerHTML = '';
             divImage.className = 'col-6 ms-5 mt-5';
             var imageElement = document.createElement('img');
-            imageElement.src = data.image;
+            const imageUrl = data.image;
+            imageElement.onclick = function() {enlargeImage(imageUrl)};
+            imageElement.src = imageUrl;
             imageElement.style.width = '100%';
             imageElement.className += `float-start border m-1`
             certificateTitle.innerHTML = data.title;

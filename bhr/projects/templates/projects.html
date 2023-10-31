@@ -10,7 +10,7 @@
 {% endblock %}
 {% block title %}Projects{% endblock %}
 {% block content %}
-<div class="container-fluid" >
+<div class="container-fluid mb-3">
     <div class="row" style="font-family: 'Noto Sans'">
         <div class="col-4 mt-5">
             {% for project in projects %}
@@ -42,5 +42,17 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:70vw">
+      <div class="modal-content" >
+        <div class="modal-body">
+            <div class="my-auto">
+                <img src="" alt="Enlarged Image" id="image-preview" class="img-fluid my-auto">
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
 <script src="{% static 'js/projects.js' %}"></script>
+<script src="{% static 'js/image-enlargment.js' %}"></script>
 {% endblock %}
