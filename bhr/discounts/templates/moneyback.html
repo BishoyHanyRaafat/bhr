@@ -28,23 +28,22 @@
 
 <div class="container mt-2" style="font-size: xx-large; text-align: center">
     <div style="font-family: 'Playpen Sans';">Your points: <span style="font-family: Merienda;" id="total-points">{{total_points}}</span></div>
+  <div class="row justify-content-center mt-3">
+      {% for key, value in vouchers.items %}
+      <div class="col-4 ms-4 mb-2">
+          <div class="card card-over rounded-4 animation" role="button" id="btn-modal{{key}}" onclick="redirectVoucher('{{value}}','{{key}}-{{total_points}}')">
+              <img src="{% static 'assets/dollar-bill' %}{{ value }}.png" alt="{{value}}">
+              <div class="card-body">
+                  <div class="horizontal-content">
+                      <h5 class="card-title card-over-title" style="font-family: Merienda;">{{ value }}$</h5>
+                      <p class="card-text card-over-text" style="font-family: 'Playpen Sans';">Points Required: <span style="font-family: Merienda ;">{{ key }}</span></p>
+                  </div>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
 </div>
-<div class="row justify-content-center mt-3">
-    {% for key, value in vouchers.items %}
-    <div class="col-4 ms-4 mb-2">
-        <div class="card card-over rounded-4 animation" role="button" id="btn-modal{{key}}" onclick="redirectVoucher('{{value}}','{{key}}-{{total_points}}')">
-            <img src="{% static 'assets/dollar-bill' %}{{ value }}.png" alt="{{value}}">
-            <div class="card-body">
-                <div class="horizontal-content">
-                    <h5 class="card-title card-over-title" style="font-family: Merienda;">{{ value }}$</h5>
-                    <p class="card-text card-over-text" style="font-family: 'Playpen Sans';">Points Required: <span style="font-family: Merienda ;">{{ key }}</span></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
 <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
 
 <script src="{% static 'js/moneyback.js' %}"></script>
