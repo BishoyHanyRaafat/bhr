@@ -8,7 +8,6 @@ function loadCertificates(certificateId) {
         .then(response => response.json())
         .then(data => {
             certificateContent.innerHTML = '';
-            divImage.className = 'col-6 ms-5 mt-5';
             var imageElement = document.createElement('img');
             const imageUrl = data.image;
             imageElement.onclick = function() {enlargeImage(imageUrl)};
