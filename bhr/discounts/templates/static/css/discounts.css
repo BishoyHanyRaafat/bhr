@@ -37,7 +37,10 @@ body{
     margin-bottom: 20px;
 }
 .modal-content {
-    width: 540px;
-    margin: 0 auto;
     text-align: center;
+}
+@media (min-width: 573px) {
+    .modal-content {
+        width: 540px;
+    }
 }

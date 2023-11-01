@@ -30,7 +30,7 @@
     <div style="font-family: 'Playpen Sans';">Your points: <span style="font-family: Merienda;" id="total-points">{{total_points}}</span></div>
   <div class="row justify-content-center mt-3">
       {% for key, value in vouchers.items %}
-      <div class="col-4 ms-4 mb-2">
+      <div class="col-lg-4 col-10 ms-lg-4 mb-2">
           <div class="card card-over rounded-4 animation" role="button" id="btn-modal{{key}}" onclick="redirectVoucher('{{value}}','{{key}}-{{total_points}}')">
               <img src="{% static 'assets/dollar-bill' %}{{ value }}.png" alt="{{value}}">
               <div class="card-body">
