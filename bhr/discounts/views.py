@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect
 from .models import Point,Voucher
 import datetime
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse,Http404
+from django.core.exceptions import PermissionDenied
 import qrcode
 from PIL import Image,ImageDraw,ImageFont
 import os
@@ -134,14 +135,14 @@ def new_voucher(request,voucher):
         try: 
             voucher_to_points[voucher]
         except KeyError:
-            return HttpResponse("Error: Invalid voucher <br> <a href='/discounts'>Back</a>")
+            raise Http404("Error: Invalid voucher <br> <a href='/discounts'>Back</a>")
         if voucher_to_points[voucher] > total_points:
-            return HttpResponse("Error: Not enough points <br> <a href='/discounts'>Back</a>")
+             raise PermissionDenied("Error: Not enough points <br> <a href='/discounts'>Back</a>")
         else:
             with transaction.atomic():
                 points_to_remove = voucher_to_points[voucher]
                 user_points = Point.objects.filter(user=request.user.id).order_by("expire_date")
-
+                
                 # Calculate the total points that are eligible for removal
                 expired_points = user_points.filter(expire_date__lte=Now())
                 expired_points.delete()
@@ -150,7 +151,7 @@ def new_voucher(request,voucher):
                 remaining_points = 0
                 points_to_delete = []
                 if voucher_to_points[voucher] > total_points:
-                    return HttpResponse("Error: Not enough points <br> <a href='/discounts'>Back</a>")
+                    raise PermissionDenied("Error: Not enough points <br> <a href='/discounts'>Back</a>")
                 for point in user_points.filter(expire_date__gt=Now()):
                     if points_to_remove > points_removed:
                         points_removed += point.value
@@ -193,7 +194,7 @@ def vouchers(request):
 @login_required(login_url='/admin/login/')
 def voucher_admin(request,voucher_id):
     if request.user.is_superuser == False:
-        return redirect(f"/admin/login/?next={request.path}")
+        raise PermissionDenied("You do not have permission to access this page.")
     voucher = Voucher.objects.filter(voucher_id=voucher_id).first()
     if voucher.expire_date < timezone.localdate():
         return HttpResponse("Error: voucher expired")

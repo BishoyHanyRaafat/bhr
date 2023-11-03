@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'users',
     'discounts',
     'crispy_forms',
+    'FAQ',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -66,7 +67,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'projects', 'templates'), 
                  os.path.join(BASE_DIR, 'users', 'templates'), 
-                 os.path.join(BASE_DIR, 'discounts', 'templates')],
+                 os.path.join(BASE_DIR, 'discounts', 'templates'),
+                 os.path.join(BASE_DIR, 'FAQ', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,6 +136,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR,"users","templates","static"),
     os.path.join(BASE_DIR,"projects",'templates','static'),
     os.path.join(BASE_DIR,"discounts","templates","static"),
+    os.path.join(BASE_DIR,"FAQ","templates","static")
 )
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
