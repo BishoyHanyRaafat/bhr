@@ -19,4 +19,4 @@ def faq(request):
     else:
         question = {'title':'FQA',
                     'description':'You can check why do I need to login <a href="?q=1">here</a><br>And if you have any question that is not here please contact me'}
-    return render(request, 'FAQ.html',{"questions":questions_list,"question":question})
+    return render(request, 'faq.html',{"questions":questions_list,"question":question})
