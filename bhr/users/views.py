@@ -28,6 +28,14 @@ def sign_up(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                user_ip = x_forwarded_for.split(',')[-1].strip()
+            else:
+                user_ip = request.META.get('REMOTE_ADDR')
+            if user_ip:
+                ip, _ = IPAddress.objects.get_or_create(address=user_ip)
+                ip.users.add(user)
             return redirect('/home')
     else:
         form = RegisterForm()

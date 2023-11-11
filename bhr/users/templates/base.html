@@ -37,6 +37,11 @@
           <li class="nav-item">
             <a class="nav-link" id="faq-link" href="/faq">FAQ</a>
           </li>
+          {% if user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link" href="/admin">Admin</a>
+            </li>
+          {% endif %}
         </ul>
         <div class="ms-auto">
           <ul class="navbar-nav">
@@ -50,11 +55,11 @@
                 </a>
               </span>
             </li>
-        {% else %}
-        <li class="nav-item">
-          <a class="nav-link" id='login-link' href="/login/">Login</a>
-        </li>
-        {% endif %}
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" id='login-link' href="/login/">Login</a>
+            </li>
+            {% endif %}
         </ul>
       </div>
     </div>
@@ -63,8 +68,7 @@
   <div class="modal fade" id="profileModal" tabindex="-1"
               aria-labelledby="profileModalLabel" aria-hidden="true">
               <div class="modal-dialog">
-                <div class="modal-content" style="width: 250px;
-                                                  margin: 0 auto;
+                <div class="modal-content" style="margin: 0 auto;
                                                   text-align: center;">
                   <div class="modal-header">
                     <h5 class="modal-title" id="profileModalLabel">Your Profile</h5>
