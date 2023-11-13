@@ -8,6 +8,7 @@ from discounts.models import Point,Voucher
 from django.db import models
 admin.site.site_header = 'BHR'
 admin.site.site_title = 'BHR Admin'
+admin.site.index_title = 'BHR'
 
 
 class PointInline(admin.TabularInline):

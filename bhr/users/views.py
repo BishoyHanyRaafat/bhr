@@ -22,7 +22,7 @@ def home(request):
     
     return render(request, 'home.html')
 
-def sign_up(request):
+"""def sign_up(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -40,7 +40,9 @@ def sign_up(request):
     else:
         form = RegisterForm()
         
-    return render(request, 'registration/sign_up.html', {"form": form})
+    return render(request, 'registration/sign_up.html', {"form": form})"""
+def custom_404(request, exception=None):
+    return render(request, '404.html',status=404)
 
 
 def favicon(_):

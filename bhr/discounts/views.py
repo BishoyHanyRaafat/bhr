@@ -135,7 +135,7 @@ def new_voucher(request,voucher):
         try: 
             voucher_to_points[voucher]
         except KeyError:
-            raise Http404("Error: Invalid voucher <br> <a href='/discounts'>Back</a>")
+            raise Http404("Invalid voucher return back to <a href='/discounts'>discounts</a> page")
         if voucher_to_points[voucher] > total_points:
              raise PermissionDenied("Error: Not enough points <br> <a href='/discounts'>Back</a>")
         else:
@@ -196,6 +196,8 @@ def voucher_admin(request,voucher_id):
     if request.user.is_superuser == False:
         raise PermissionDenied("You do not have permission to access this page.")
     voucher = Voucher.objects.filter(voucher_id=voucher_id).first()
+    if voucher == None:
+        raise Http404("Voucher not found return back to the <a href='/discounts'> discount</a> page")
     if voucher.expire_date < timezone.localdate():
         return HttpResponse("Error: voucher expired")
     date_difference =  voucher.expire_date - timezone.localdate()
