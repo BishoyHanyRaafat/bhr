@@ -154,4 +154,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  
+EMAIL_HOST_USER = 'bishoybhr@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD") 
+EMAIL_USE_TLS = True 
+DEFAULT_FROM_EMAIL = 'bishoybhr@gmail.com'
+
 handler404 = 'users.views.custom_404'

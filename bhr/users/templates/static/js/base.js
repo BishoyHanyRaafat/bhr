@@ -10,7 +10,8 @@ window.onload =  function(){
     mode = localStorage.getItem('mode');
     if(mode == 'dark'){
         changeTheme('dark');
-        document.getElementById("darkmode-toggle").checked = true;
+        document.getElementById("moon").style.display = "block";
+        document.getElementById('sun').style.display = "none";
     }
     else{
         changeTheme('light');
@@ -32,12 +33,12 @@ function changeTheme(theme){
     document.body.setAttribute("data-bs-theme", theme);
     console.log(theme)
     if(theme=='dark'){
-        document.getElementById("moon").setAttribute("fill","black");
-        document.getElementById('sun').setAttribute("fill","yellow");
+        document.getElementById("moon").style.display = "block";
+        document.getElementById('sun').style.display = "none";
     }
     else{
-        document.getElementById("moon").setAttribute("fill","currentColor");
-        document.getElementById("sun").setAttribute("fill","currentColor");
+        document.getElementById("moon").style.display = "none";
+        document.getElementById('sun').style.display = "block";
     }
 }
 

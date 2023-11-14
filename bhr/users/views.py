@@ -1,7 +1,4 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User, Group
 from .models import IPAddress
 from django.http import HttpResponse
