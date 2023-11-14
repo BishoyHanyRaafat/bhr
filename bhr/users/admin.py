@@ -74,7 +74,7 @@ class IPAddressInline(admin.TabularInline):
             for user in users
         ]
         return mark_safe(", ".join(user_links))
-    user_link.short_description = 'Other users'
+    user_link.short_description = 'Other users with the same IP address'
     readonly_fields = ("user_link",)
 
 class CustomUserAdmin(UserAdmin):

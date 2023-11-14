@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block headers %} 
+<link rel="stylesheet" type="text/css" href="{% static 'styles/home_style.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-start">
+    <div class="col-lg-6 col-11 offset-md-2 shadow-lg rounded-4 card p-4 mx-lg-auto m-2">
+      <h5 class="card-body" style="text-align: center">
+        {% block title_base_registration %}{% endblock %}
+      </h5>
+      <form method="post">
+        {% block main_content_base_registration %}{% endblock %}
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/registration.js' %}"></script>
+{% endblock %}
