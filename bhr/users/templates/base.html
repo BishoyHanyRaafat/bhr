@@ -14,7 +14,7 @@
   <title>{% block title %}My Site{% endblock %}</title>
 </head>
 
-<body data-bs-theme="light">
+<body data-bs-theme={{request.COOKIES.mode}}>
   <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
     <div class="container-fluid fs-5">
       <img class="navbar-brand" src="{% static 'assets/logo_no_slag.png' %}" alt="Logo" width="40" height="40"
