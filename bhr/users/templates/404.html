@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Page not found</title>
     </head>
-    <body>
+    <body data-bs-theme={{request.COOKIES.mode}}>
         <div class="d-flex align-items-center justify-content-center vh-100">
             <div class="text-center">
                 <h1 class="display-1 fw-bold">404<br><div class="emoji">😕</div></h1>
@@ -27,5 +27,4 @@
             </div>
         </div>
     </body>
-    <script src="{% static 'js/base.js' %}"></script>
 </html>

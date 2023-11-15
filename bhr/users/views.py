@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, Group
 from .models import IPAddress
-from django.http import HttpResponse
 from django.templatetags.static import static
 # Create your views here.
 def home(request):
     user = request.user
-
     if user.is_authenticated:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
@@ -41,6 +39,8 @@ def home(request):
 def custom_404(request, exception=None):
     return render(request, '404.html',status=404)
 
+def permission_denied_view(request, exception=None):
+    return render(request, '403.html', status=403)
 
 def favicon(_):
     url=static("favicon.ico")

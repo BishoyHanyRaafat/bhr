@@ -12,5 +12,6 @@ urlpatterns = [
     path('vouchers/<int:voucher>',new_voucher),
     path('vouchers/',vouchers),
     path('vouchers/admin/<str:voucher_id>',voucher_admin),
+    path("vouchers/admin/",voucher_admin),
     path('users/<int:user_id>',user_QR),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

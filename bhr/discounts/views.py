@@ -18,6 +18,7 @@ from django.db.models.functions import Now
 from .models import Point, Voucher
 from django.db import transaction
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 from django.core.cache import cache
 
 # Create your views here.
@@ -131,44 +132,47 @@ def new_voucher(request,voucher):
     cache_key = f"lock_{request.user.id}_new_voucher"
     lock_acquired = cache.add(cache_key, "locked", timeout=60)
     if lock_acquired:
-        total_points = get_total_points(request.user.id)
-        try: 
-            voucher_to_points[voucher]
-        except KeyError:
-            raise Http404("Invalid voucher return back to <a href='/discounts'>discounts</a> page")
-        if voucher_to_points[voucher] > total_points:
-             raise PermissionDenied("Error: Not enough points <br> <a href='/discounts'>Back</a>")
-        else:
-            with transaction.atomic():
-                points_to_remove = voucher_to_points[voucher]
-                user_points = Point.objects.filter(user=request.user.id).order_by("expire_date")
-                
-                # Calculate the total points that are eligible for removal
-                expired_points = user_points.filter(expire_date__lte=Now())
-                expired_points.delete()
-                points_removed =0
-                # Calculate and remove the points
-                remaining_points = 0
-                points_to_delete = []
-                if voucher_to_points[voucher] > total_points:
-                    raise PermissionDenied("Error: Not enough points <br> <a href='/discounts'>Back</a>")
-                for point in user_points.filter(expire_date__gt=Now()):
-                    if points_to_remove > points_removed:
-                        points_removed += point.value
-                        date = point.expire_date
-                        points_to_delete.append(point)
-                    else:
-                        break  # No need to iterate further
-                for point in points_to_delete:
-                    point.delete()
-                remaining_points =  points_removed-points_to_remove
-                # Create a new Point object with the remaining points (if any)
-                if remaining_points > 0:
-                    Point.objects.create(user=request.user, value=remaining_points, expire_date=date)
+        try:
+            total_points = get_total_points(request.user.id)
+            try: 
+                voucher_to_points[voucher]
+            except KeyError:
+                raise Http404("Invalid voucher return back to <a href='/discounts'>discounts</a> page")
+            if voucher_to_points[voucher] > total_points:
+                raise PermissionDenied("Not enough points")
+            else:
+                with transaction.atomic():
+                    points_to_remove = voucher_to_points[voucher]
+                    user_points = Point.objects.filter(user=request.user.id).order_by("expire_date")
+                    
+                    # Calculate the total points that are eligible for removal
+                    expired_points = user_points.filter(expire_date__lte=Now())
+                    expired_points.delete()
+                    points_removed =0
+                    # Calculate and remove the points
+                    remaining_points = 0
+                    points_to_delete = []
+                    if voucher_to_points[voucher] > total_points:
+                        raise PermissionDenied("Not enough points")
+                    for point in user_points.filter(expire_date__gt=Now()):
+                        if points_to_remove > points_removed:
+                            points_removed += point.value
+                            date = point.expire_date
+                            points_to_delete.append(point)
+                        else:
+                            break  # No need to iterate further
+                    for point in points_to_delete:
+                        point.delete()
+                    remaining_points =  points_removed-points_to_remove
+                    # Create a new Point object with the remaining points (if any)
+                    if remaining_points > 0:
+                        Point.objects.create(user=request.user, value=remaining_points, expire_date=date)
 
-                # Create a new Voucher object
-                Voucher.objects.create(user=request.user, value=voucher)
-                return render(request, 'new_voucher.html',{"voucher":voucher})
+                    # Create a new Voucher object
+                    Voucher.objects.create(user=request.user, value=voucher)
+                    return render(request, 'new_voucher.html',{"voucher":voucher})
+        finally:
+            cache.delete(cache_key)
     else:
         return HttpResponse("Error: The view is already being processed. Please try again later.")
 
@@ -192,17 +196,31 @@ def vouchers(request):
 
 
 @login_required(login_url='/admin/login/')
-def voucher_admin(request,voucher_id):
+def voucher_admin(request,voucher_id=None):
     if request.user.is_superuser == False:
         raise PermissionDenied("You do not have permission to access this page.")
-    voucher = Voucher.objects.filter(voucher_id=voucher_id).first()
-    if voucher == None:
-        raise Http404("Voucher not found return back to the <a href='/discounts'> discount</a> page")
-    if voucher.expire_date < timezone.localdate():
-        return HttpResponse("Error: voucher expired")
-    date_difference =  voucher.expire_date - timezone.localdate()
-    voucher.date = get_time_formated(date_difference)
+    if voucher_id == None and request.method == "GET":
+        vouchers_ = Voucher.objects.filter(expire_date__gte=timezone.localdate()).order_by("is_used","expire_date")
+        for voucher in vouchers_:
+            date_difference =  voucher.expire_date - timezone.localdate()
+            voucher.date = get_time_formated(date_difference)
+        return render(request,'voucher_admin.html',{"voucher":vouchers_})
+    elif voucher_id != None:
+        try:
+            voucher = Voucher.objects.filter(voucher_id=voucher_id).first()
+            if voucher == None:
+                raise ValidationError("UUID {} doesn't exist".format(voucher_id))
+        except ValidationError as e:
+            raise Http404(f"{e.message}")
+        if voucher.expire_date < timezone.localdate():
+            return Http404("Voucher expired")
+        date_difference =  voucher.expire_date - timezone.localdate()
+        voucher.date = get_time_formated(date_difference)
+        return render(request, 'voucher_admin.html', {'voucher':[voucher]})
     if request.method == "POST":
+        print(request.POST)
+        voucher = Voucher.objects.filter(voucher_id = request.POST.get("voucher_id")).first()
+        print(voucher.voucher_id)
         action = request.POST.get('action')
         if action == "revoke":
             voucher.is_used = True
@@ -210,4 +228,5 @@ def voucher_admin(request,voucher_id):
         elif action == "unrevoke":
             voucher.is_used = False
             voucher.save()
-    return render(request, 'voucher_admin.html', {'voucher':voucher})
+        return redirect(request.META['HTTP_REFERER'])
+    
