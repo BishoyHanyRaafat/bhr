@@ -10,7 +10,7 @@
       <h5 class="card-body" style="font-family:'Varela Round';text-align: center">
         {% block title_base_registration %}{% endblock %}
       </h5>
-      <form method="post">
+      <form method="post" id="base_registration_form" autocomplete="{% if form.errors %}off{% else %}on{% endif %}">
         {% block main_content_base_registration %}{% endblock %}
       </form>
     </div>
@@ -18,4 +18,16 @@
 </div>
 
 <script src="{% static 'js/registration.js' %}"></script>
+<script>
+  $(document).ready(function() {
+      // Attach an event listener to the form submission
+      $('#base_registration_form').on('submit', function() {
+          // Check if there are no form errors
+          if (!$('#base_registration_form')[0].checkValidity()) {
+              // Update the autocomplete attribute to "on"
+              $('#base_registration_form').attr('autocomplete', 'on');
+          }
+      });
+  });
+</script>
 {% endblock %}

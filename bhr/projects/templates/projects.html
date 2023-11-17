@@ -42,17 +42,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mx-auto" style="max-width:80vw">
-      <div class="modal-content" >
-        <div class="modal-body">
-            <div class="my-auto">
-                <img src="" alt="Enlarged Image" id="image-preview" class="img-fluid my-auto">
-            </div>
-        </div>
-      </div>
-    </div>
-</div>
+{% include "image_preview_modal.html"%}
+
 <script src="{% static 'js/projects.js' %}"></script>
-<script src="{% static 'js/image-enlargment.js' %}"></script>
+
 {% endblock %}
