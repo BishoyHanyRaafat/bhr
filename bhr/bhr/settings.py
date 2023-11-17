@@ -24,8 +24,9 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = bool(int(os.environ.get('DEBUG')))
 hosts = os.environ.get('ALLOWED_HOSTS')
+ADMINS = [("Bishoy", "bishoyhany006@gmail.com")]
 if hosts:
     ALLOWED_HOSTS = hosts.split(',')
 
