@@ -18,5 +18,5 @@ def faq(request):
             raise Http404("Question does not exist")
     else:
         question = {'title':'FQA',
-                    'description':'You can check why do I need to login <a href="?q=1">here</a><br>And if you have any question that is not here please contact me'}
+                    'description':'<p> You can check why do I need to login <a href="?q=1">here</a><br></p><p>If you have any question further question please contact me </p>'}
     return render(request, 'faq.html',{"questions":questions_list,"question":question})
