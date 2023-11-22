@@ -119,4 +119,11 @@
     </div>
 </div>
 <script src="{% static 'js/discounts-link.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.location.hash === '#shareModal') {
+    showModal()
+    }
+});
+</script>
 {% endblock %}
