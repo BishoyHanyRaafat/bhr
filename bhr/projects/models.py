@@ -16,6 +16,7 @@ class Project(models.Model):
     description = models.TextField()
     demo = models.BooleanField()
     chat = models.BooleanField()
+    show = models.BooleanField(default=True)
     def __str__(self):
         return self.title
 
@@ -23,6 +24,5 @@ class Project(models.Model):
 class ProjectImage(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=project_image_path)
-    show = models.BooleanField(default=True)
     def __str__(self):
         return self.project.title
