@@ -1,16 +1,18 @@
 body {
     background: linear-gradient(to right, #008374 0%, #008374 35%, var(--bs-body-bg) 35%, var(--bs-body-bg) 100%);
+    scrollbar-width: thin; /* for Firefox */
+    scrollbar-color: transparent transparent; /* for Firefox */
 }
-/* width */
-::-webkit-scrollbar {
-    width: 10px;
-    border-radius: 10px;
+body::-webkit-scrollbar-track,body::-webkit-scrollbar-track-piece  {
+    background-color: var(--bs-body-bg) !important; /* track color */
+}
+body::-webkit-scrollbar ,::-webkit-scrollbar{
+    width: 8px;
 }
   
 /* Track */
 ::-webkit-scrollbar-track {
-   background: transparent; 
-   border-radius: 10px;
+   background-color: transparent;
 }
    
  /* Handle */
@@ -22,6 +24,8 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #555; 
-    width:20px;
-    border-radius: 10px;
+    border-radius: 12px;
+}
+::-webkit-scrollbar:hover {
+    width: 12px;
 }
