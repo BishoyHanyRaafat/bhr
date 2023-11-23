@@ -14,15 +14,17 @@
     <div class="row" style="font-family: 'Noto Sans'">
         <div class="col-4 mt-5">
             {% for project in projects %}
-            <ul class="list-group m-2 user-select-none">
-                <li class="list-group-item rounded-5 border-white" style="background-color: transparent; color: white;">
-                    <div onclick="reloadPage('{{project.project_id}}')"class='text text-truncate' style="cursor:pointer">{{project}}
-                        {% if project.demo %}
-                        <span class="badge text-bg-secondary">Demo</span>
-                        {%endif%}
-                    </div>
-                </li>
-            </ul>
+                {% if project.show %}
+                    <ul class="list-group m-2 user-select-none">
+                        <li class="list-group-item rounded-5 border-white" style="background-color: transparent; color: white;">
+                            <div onclick="reloadPage('{{project.project_id}}')"class='text text-truncate' style="cursor:pointer">{{project}}
+                                {% if project.demo %}
+                                <span class="badge text-bg-secondary">Demo</span>
+                                {%endif%}
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}
             {% endfor %}
         </div>
         <div class="col-sm-6 col-7 ms-2 ms-sm-5 mt-5">
