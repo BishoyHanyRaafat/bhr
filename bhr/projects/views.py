@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, JsonResponse
+from django.core.exceptions import PermissionDenied
 from PIL import Image
 from .models import Project, ProjectImage,Certificate
 # Create your views here.
@@ -42,19 +43,20 @@ def projects(request):
                                                         "prediction":prediction,
                                                         "image_url":image_url}})"""
 def projects(request):
-    projects = Project.objects.all()
+    projects = Project.objects.values('title','project_id', 'show',"demo")
     return render(request, 'projects.html',{'projects':projects})
 
-def return_project(_, project_id):
+def return_project(request, project_id):
     project = Project.objects.filter(project_id=project_id).first()
-    return JsonResponse({'project_id':project_id,'title':project.title,'description':project.description,"demo":project.demo,"chat":project.chat})
-
-def return_images(_, project_id):
+    if project == None:
+        raise Http404
+    if project.show == False and not request.user.is_superuser:
+        raise PermissionDenied
     project_images = ProjectImage.objects.filter(project_id=project_id)
     images = []
     for project_image in project_images:
         images.append(project_image.image.url)
-    return JsonResponse({"images":images})
+    return JsonResponse({"title":project.title,"description":project.description,"images":images,"demo":project.demo,"chat":project.chat})
 
 def return_certificates(_, certificate_id):
     certificate = Certificate.objects.filter(certificate_id=certificate_id).first()

@@ -16,7 +16,7 @@
                 {% if project.show or user.is_superuser %}
                     <ul class="list-group m-2 user-select-none">
                         <li class="list-group-item rounded-5 border-white" style="background-color: transparent; color: white;">
-                            <div onclick="reloadPage('{{project.project_id}}')"class='text text-truncate' style="cursor:pointer">{{project}}
+                            <div onclick="reloadPage('{{project.project_id}}')"class='text text-truncate' style="cursor:pointer">{{project.title}}
                                 {% if project.demo %}
                                     <span class="badge text-bg-secondary">Demo</span>
                                 {%endif%}

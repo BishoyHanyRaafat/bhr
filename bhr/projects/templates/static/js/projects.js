@@ -22,7 +22,7 @@ fetch(`/core/projects/${project_id}`)
     .then(response => response.json())
     .then(data => {
         if(data.demo == false){
-            fetchAndDisplayImages(project_id);
+            fetchAndDisplayImages(data);
         }
         else{
             divElement = document.getElementById('div-warning');
@@ -33,41 +33,38 @@ fetch(`/core/projects/${project_id}`)
     });
 }
 
-
-// Function to fetch and display images from a Django endpoint
-function fetchAndDisplayImages(projectId) {
-    fetch(`/core/projects/images/${projectId}`)
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('project-images').innerHTML = '';
-        var aligment = 'end';
-        if (data.images.length > 1){
-            for (let i = 0; i < data.images.length; i++) {
-                if(aligment == 'start'){
-                    aligment = 'end';
-                }
-                else{
-                    aligment = 'start';
-                    var divElement = document.createElement('div');
-                    divElement.className= 'row';
-                }
-                const imageElement = document.createElement('img');
-                const imageUrl = data.images[i];
-                imageElement.onclick = function() {enlargeImage(imageUrl)};
-                imageElement.src = imageUrl;
-                imageElement.style.width = '300px';
-                imageElement.className = `rounded-4 float-${aligment} border border-2 m-1`;
-                divElement.appendChild(imageElement);
-                document.getElementById('project-images').appendChild(divElement); } 
-        }else{
+function fetchAndDisplayImages(data) {
+    document.getElementById('project-images').innerHTML = '';
+    if (data.images.length == 0) {
+        return;
+    }
+    var aligment = 'end';
+    if (data.images.length > 1) {
+        for (let i = 0; i < data.images.length; i++) {
+            if (aligment == 'start') {
+                aligment = 'end';
+            }
+            else {
+                aligment = 'start';
+                var divElement = document.createElement('div');
+                divElement.className = 'row';
+            }
             const imageElement = document.createElement('img');
-            imageElement.onclick = function() {enlargeImage(data.images[0])};
-            imageElement.src = data.images[0];
-            imageElement.style.width = '100%';
-            imageElement.className = `rounded-4 border border-2 m-1`;
-            document.getElementById('project-images').appendChild(imageElement); 
+            const imageUrl = data.images[i];
+            imageElement.onclick = function () { enlargeImage(imageUrl) };
+            imageElement.src = imageUrl;
+            imageElement.style.width = '300px';
+            imageElement.className = `rounded-4 float-${aligment} border border-2 m-1`;
+            divElement.appendChild(imageElement);
+            document.getElementById('project-images').appendChild(divElement);
         }
-            
-        }
-  )};
-  
+    } else {
+        const imageElement = document.createElement('img');
+        imageElement.onclick = function () { enlargeImage(data.images[0]) };
+        imageElement.src = data.images[0];
+        imageElement.style.width = '100%';
+        imageElement.className = `rounded-4 border border-2 m-1`;
+        document.getElementById('project-images').appendChild(imageElement);
+    }
+
+};
