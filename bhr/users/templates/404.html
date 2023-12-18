@@ -14,7 +14,7 @@
             <div class="text-center">
                 <h1 class="display-1 fw-bold">404<br><div class="emoji">😕</div></h1>
                 <p class="fs-3"> <span class="text-danger">Opps!</span>
-                    {% if exception != "Resolver404" %}
+                    {% if exception != "Resolver404" and exception != "Http404" %}
                         {{exception|safe}} 
                     {% else %}
                          Page not found.

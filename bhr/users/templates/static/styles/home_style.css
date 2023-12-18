@@ -40,3 +40,8 @@ hr {
 .animation{
     transition: transform 0.2s;
 }
+p {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    font-size: 1.2rem;
+}
